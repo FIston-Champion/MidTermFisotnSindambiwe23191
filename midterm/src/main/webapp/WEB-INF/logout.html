@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+</head>
+<body>
+<script>
+    // Simulate session invalidation by calling the backend logout service
+    fetch('http://localhost:8080/your-app/logout')
+        .then(() => {
+            window.location.href = "login.html"; // Redirect to login page after logout
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>

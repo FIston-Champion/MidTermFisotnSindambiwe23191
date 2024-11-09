@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <display-name>AUCA Library Management System</display-name>
+
+    <!-- Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- Servlet Declarations -->
+    <servlet>
+        <servlet-name>BookServlet</servlet-name>
+        <servlet-class>org.example.servlet.BookServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>BorrowerServlet</servlet-name>
+        <servlet-class>org.example.servlet.BorrowerServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LocationServlet</servlet-name>
+        <servlet-class>org.example.servlet.LocationServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>MembershipServlet</servlet-name>
+        <servlet-class>org.example.servlet.MembershipServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>MembershipTypeServlet</servlet-name>
+        <servlet-class>org.example.servlet.MembershipTypeServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PersonServlet</servlet-name>
+        <servlet-class>org.example.servlet.PersonServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>RoomServlet</servlet-name>
+        <servlet-class>org.example.servlet.RoomServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ShelfServlet</servlet-name>
+        <servlet-class>org.example.servlet.ShelfServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>org.example.servlet.UserServlet</servlet-class>
+    </servlet>
+
+    <!-- Servlet Mappings -->
+    <servlet-mapping>
+        <servlet-name>BookServlet</servlet-name>
+        <url-pattern>/books/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BorrowerServlet</servlet-name>
+        <url-pattern>/borrower/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LocationServlet</servlet-name>
+        <url-pattern>/location/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MembershipServlet</servlet-name>
+        <url-pattern>/membership/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MembershipTypeServlet</servlet-name>
+        <url-pattern>/membershipType/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PersonServlet</servlet-name>
+        <url-pattern>/person/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RoomServlet</servlet-name>
+        <url-pattern>/room/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ShelfServlet</servlet-name>
+        <url-pattern>/shelves/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Session Configuration -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- Error Pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/error/404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/error/500.jsp</location>
+    </error-page>
+
+    <!-- Security Constraints -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secured Resources</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Security Roles -->
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
+
+</web-app>

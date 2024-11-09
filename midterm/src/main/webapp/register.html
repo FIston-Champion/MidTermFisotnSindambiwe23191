@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 30px;
+    }
+
+    /* Form Container */
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #signupMessage {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #4CAF50;
+    }
+
+    p {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    p a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    p a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<h2>User Registration</h2>
+<form id="signupForm">
+  <label for="firstName">First Name:</label>
+  <input type="text" id="firstName" name="firstName" required><br><br>
+
+  <label for="lastName">Last Name:</label>
+  <input type="text" id="lastName" name="lastName" required><br><br>
+
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="userName" required><br><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required><br><br>
+
+  <label for="role">Role:</label>
+  <select id="role" name="role" required>
+    <option value="STUDENT">Student</option>
+    <option value="TEACHER">Teacher</option>
+    <option value="LIBRARIAN">Librarian</option>
+    <option value="Dean">Dean</option>
+    <option value="Manage">Manage</option>
+  </select><br><br>
+
+  <button type="submit">Register</button>
+</form>
+
+<div id="signupMessage"></div>
+
+<p>Already have an account? <a href="login.html">Login here</a></p>
+
+<script>
+  document.getElementById('signupForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const userData = {
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          userName: formData.get('userName'),
+          password: formData.get('password'),
+          role: formData.get('role')
+      };
+
+      fetch('http://localhost:8080/your-app/user', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              document.getElementById('signupMessage').innerText = "Registration successful! You can now login.";
+              event.target.reset();
+          } else {
+              document.getElementById('signupMessage').innerText = "Registration failed. Try again.";
+          }
+      })
+      .catch(error => console.error('Error:', error));
+  });
+</script>
+</body>
+</html>

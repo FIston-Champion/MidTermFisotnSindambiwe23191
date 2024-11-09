@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Navigation Bar Styles */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Content and Dashboard */
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #dashboardContent {
+            margin: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        p a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Book Gallery Styles */
+        .book-gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .book-item {
+            margin: 10px;
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: white;
+            text-align: center;
+            width: 150px;
+        }
+
+        .book-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .book-item h4 {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .book-item p {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#" onclick="logout()">Logout</a> <!-- Updated Logout to JavaScript function -->
+</nav>
+
+<h2>Welcome to the AUCA Library Management System System</h2>
+
+<div id="dashboardContent"></div>
+
+<div class="book-gallery">
+    <div class="book-item">
+        <img src="book1.jpg" alt="Book 1">
+        <h4>Book Title 1</h4>
+        <p>Author: Author Name</p>
+    </div>
+    <div class="book-item">
+        <img src="book2.jpg" alt="Book 2">
+        <h4>Keith Houston</h4>
+        <p>Author: Author Name</p>
+    </div>
+    <div class="book-item">
+        <img src="book3.jpg" alt="Book 3">
+        <h4>Book Title 3</h4>
+        <p>Author: Author Name</p>
+    </div>
+    <div class="book-item">
+        <img src="book4.jpg" alt="Book 4">
+        <h4>Book Title 4</h4>
+        <p>Author: Author Name</p>
+    </div>
+</div>
+
+
+<p><a href="logout.html">Logout</a></p>
+
+
+
+
+
+<script>
+    // Function to handle logout
+    function logout() {
+        // Clear session on the server
+        fetch('http://localhost:8080/your-app/logout', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = 'login.html'; // Redirect to login page
+                }
+            })
+            .catch(error => console.error('Error during logout:', error));
+    }
+
+    // Simulate a session check by fetching user data from the server
+    fetch('http://localhost:8080/your-app/session')
+        .then(response => response.json())
+        .then(data => {
+            if (data.user) {
+                document.getElementById('dashboardContent').innerHTML = `
+                    <h3>Welcome, ${data.user.firstName} ${data.user.lastName}</h3>
+                    <p>Your role: ${data.user.role}</p>
+                `;
+
+                // Display role-based actions
+                if (data.user.role === 'LIBRARIAN') {
+                    document.getElementById('dashboardContent').innerHTML += `
+                        <p><a href="manageBooks.html">Manage Books</a></p>
+                        <p><a href="approveMembership.html">Approve Memberships</a></p>
+                    `;
+                } else if (data.user.role === 'STUDENT' || data.user.role === 'TEACHER') {
+                    document.getElementById('dashboardContent').innerHTML += `
+                        <p><a href="borrowBooks.html">Borrow Books</a></p>
+                        <p><a href="viewBorrowedBooks.html">View Borrowed Books</a></p>
+                    `;
+                }
+            } else {
+                window.location.href = "login.html"; // Redirect to login if no session found
+            }
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+
+<footer>
+    <p>&copy; 2024 AUCA Library Management  System</p>
+</footer>
+</body>
+</html>
