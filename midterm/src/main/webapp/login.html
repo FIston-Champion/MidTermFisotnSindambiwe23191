@@ -2,9 +2,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AUCA Library</title>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        /* Form Container */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #loginMessage {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        p a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+<h2>Login to AUCA Library</h2>
+<form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
 
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Login</button>
+</form>
+
+<div id="loginMessage"></div>
+
+<p>Don't have an account? <a href="register.html">Register here</a></p>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const loginData = {
+            userName: username,
+            password: password
+        };
+
+        fetch('http://localhost:8080/your-app/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const messageDiv = document.getElementById('loginMessage');
+            if (data.token) {
+                // Store the token in localStorage
+                localStorage.setItem('userToken', data.token);
+                localStorage.setItem('userRole', data.role);
+
+                messageDiv.className = 'success';
+                messageDiv.innerText = 'Login successful! Redirecting...';
+
+                // Redirect based on role
+                setTimeout(() => {
+                    switch(data.role) {
+                        case 'LIBRARIAN':
+                            window.location.href = 'librarian-dashboard.html';
+                            break;
+                        case 'STUDENT':
+                        case 'TEACHER':
+                            window.location.href = 'user-dashboard.html';
+                            break;
+                        case 'Dean':
+                        case 'Manage':
+                            window.location.href = 'admin-dashboard.html';
+                            break;
+                        default:
+                            window.location.href = 'dashboard.html';
+                    }
+                }, 1500);
+            } else {
+                messageDiv.className = 'error';
+                messageDiv.innerText = 'Invalid credentials. Please try again.';
+            }
+        })
+        .catch(error => {
+            const messageDiv = document.getElementById('loginMessage');
+            messageDiv.className = 'error';
+            messageDiv.innerText = 'Login failed. Please try again.';
+            console.error('Error:', error);
+        });
+    });
+</script>
 </body>
 </html>
